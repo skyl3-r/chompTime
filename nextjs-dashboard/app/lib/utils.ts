@@ -9,13 +9,16 @@ export const formatCurrency = (amount: number) => {
 
 export const formatDateToLocal = (
   dateStr: string,
-  locale: string = 'en-US',
+  locale: string = 'en-US'
 ) => {
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true, // Ensures the time is formatted as 12-hour (e.g., 9:43 PM)
   };
   const formatter = new Intl.DateTimeFormat(locale, options);
   return formatter.format(date);

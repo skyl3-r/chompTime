@@ -68,7 +68,7 @@ async function seedTasks() {
     CREATE TABLE IF NOT EXISTS tasks (
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      dueDate DATE NOT NULL,
+      duedate DATE NOT NULL,
       assignedId UUID NOT NULL,
       meetingId UUID NOT NULL,
       priority VARCHAR(255) NOT NULL, 

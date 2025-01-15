@@ -1,9 +1,13 @@
 import { sql } from '@vercel/postgres';
 import {
-  CustomerField,
+  UserField,
+  // CustomerField,
+  MeetingField,
   CustomersTableType,
-  InvoiceForm,
+  // InvoiceForm,
+  TaskForm,
   InvoicesTable,
+  TasksTable,
   LatestInvoiceRaw,
   Revenue,
 } from './definitions';
@@ -83,41 +87,89 @@ export async function fetchCardData() {
   }
 }
 
+// const ITEMS_PER_PAGE = 6;
+// export async function fetchFilteredInvoices(
+//   query: string,
+//   currentPage: number,
+// ) {
+//   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+//   try {
+//     const invoices = await sql<InvoicesTable>`
+//       SELECT
+//         invoices.id,
+//         invoices.amount,
+//         invoices.date,
+//         invoices.status,
+//         customers.name,
+//         customers.email,
+//         customers.image_url
+//       FROM invoices
+//       JOIN customers ON invoices.customer_id = customers.id
+//       WHERE
+//         customers.name ILIKE ${`%${query}%`} OR
+//         customers.email ILIKE ${`%${query}%`} OR
+//         invoices.amount::text ILIKE ${`%${query}%`} OR
+//         invoices.date::text ILIKE ${`%${query}%`} OR
+//         invoices.status ILIKE ${`%${query}%`}
+//       ORDER BY invoices.date DESC
+//       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+//     `;
+
+//     return invoices.rows;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch invoices.');
+//   }
+// }
+
+
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
+export async function fetchFilteredTasks(
   query: string,
   currentPage: number,
 ) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const invoices = await sql<InvoicesTable>`
+    const tasks = await sql<TasksTable>`
       SELECT
-        invoices.id,
-        invoices.amount,
-        invoices.date,
-        invoices.status,
-        customers.name,
-        customers.email,
-        customers.image_url
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
+        tasks.id,
+        tasks.title,
+        tasks.duedate, 
+        tasks.assignedId,
+        tasks.meetingId,
+        tasks.priority, 
+        tasks.status,
+        users.name,
+        users.email,
+        meetings.locationLink,
+        meetings.title AS meetingTitle
+      FROM tasks
+      JOIN users ON tasks.assignedId = users.id
+      JOIN meetings ON tasks.meetingId = meetings.id
       WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
-      ORDER BY invoices.date DESC
+        users.name ILIKE ${`%${query}%`} OR
+        users.email ILIKE ${`%${query}%`} OR
+        meetings.title ILIKE ${`%${query}%`} OR
+        meetings.locationLink ILIKE ${`%${query}%`} OR
+        tasks.title ILIKE ${`%${query}%`} OR
+        tasks.assignedId::text ILIKE ${`%${query}%`} OR
+        tasks.meetingId::text ILIKE ${`%${query}%`} OR
+        tasks.priority ILIKE ${`%${query}%`} OR
+        tasks.duedate::text ILIKE ${`%${query}%`} OR
+        tasks.status ILIKE ${`%${query}%`}
+      ORDER BY tasks.duedate DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
-    return invoices.rows;
+    return tasks.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoices.');
+    throw new Error('Failed to fetch tasks.');
   }
 }
+
 
 export async function fetchInvoicesPages(query: string) {
   try {
@@ -140,46 +192,111 @@ export async function fetchInvoicesPages(query: string) {
   }
 }
 
-export async function fetchInvoiceById(id: string) {
+export async function fetchTasksPages(query: string) {
   try {
-    const data = await sql<InvoiceForm>`
-      SELECT
-        invoices.id,
-        invoices.customer_id,
-        invoices.amount,
-        invoices.status
-      FROM invoices
-      WHERE invoices.id = ${id};
-    `;
+    const count = await sql`SELECT COUNT(*)
+    FROM tasks
+    JOIN users ON tasks.assignedId = users.id
+    WHERE
+      users.name ILIKE ${`%${query}%`} OR
+      users.email ILIKE ${`%${query}%`} OR
+      tasks.title ILIKE ${`%${query}%`} OR
+      tasks.assignedId::text ILIKE ${`%${query}%`} OR
+      tasks.meetingId::text ILIKE ${`%${query}%`} OR
+      tasks.priority ILIKE ${`%${query}%`} OR
+      tasks.duedate::text ILIKE ${`%${query}%`} OR
+      tasks.status ILIKE ${`%${query}%`}
+  `;
 
-    const invoice = data.rows.map((invoice) => ({
-      ...invoice,
-      // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
-    }));
-
-    return invoice[0];
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoice.');
+    throw new Error('Failed to fetch total number of tasks.');
   }
 }
 
-export async function fetchCustomers() {
+// export async function fetchInvoiceById(id: string) {
+//   try {
+//     const data = await sql<InvoiceForm>`
+//       SELECT
+//         invoices.id,
+//         invoices.customer_id,
+//         invoices.amount,
+//         invoices.status
+//       FROM invoices
+//       WHERE invoices.id = ${id};
+//     `;
+
+//     const invoice = data.rows.map((invoice) => ({
+//       ...invoice,
+//       // Convert amount from cents to dollars
+//       amount: invoice.amount / 100,
+//     }));
+
+//     return invoice[0];
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch invoice.');
+//   }
+// }
+
+export async function fetchTaskById(id: string) {
   try {
-    const data = await sql<CustomerField>`
+    const data = await sql<TaskForm>`
+      SELECT
+        tasks.id,
+        tasks.title,
+        tasks.duedate,
+        tasks.assignedId,
+        tasks.meetingId,
+        tasks.priority,
+        tasks.status
+      FROM tasks
+      WHERE tasks.id = ${id};
+    `;
+
+    const task = data.rows
+    return task[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch tasks.');
+  }
+}
+
+export async function fetchUsers() {
+  try {
+    const data = await sql<UserField>`
       SELECT
         id,
         name
-      FROM customers
+      FROM users
       ORDER BY name ASC
     `;
 
-    const customers = data.rows;
-    return customers;
+    const users = data.rows;
+    return users;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
+    throw new Error('Failed to fetch all users.');
+  }
+}
+
+export async function fetchMeetings() {
+  try {
+    const data = await sql<MeetingField>`
+      SELECT
+        id,
+        title
+      FROM meetings
+      ORDER BY title ASC
+    `;
+
+    const meetings = data.rows;
+    return meetings;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all meetings.');
   }
 }
 
