@@ -1,5 +1,6 @@
 import { sql } from "@vercel/postgres";
 import { sendEmail } from "@/app/lib/emailService";
+import { NextResponse } from "next/server";
 
 export async function GET() {
 
@@ -45,9 +46,9 @@ export async function GET() {
             `;
         }
 
-        return new Response("Reminders processed successfully", {status: 200});
+        return new NextResponse("Reminders processed successfully", {status: 200});
     } catch (error) {
         console.error("Error processing reminders", error);
-        return new Response("Failed to process reminders", {status: 500})
+        return new NextResponse("Failed to process reminders", {status: 500})
     }
 }
