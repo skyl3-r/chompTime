@@ -43,8 +43,8 @@ async function seedMeetings() {
     CREATE TABLE IF NOT EXISTS meetings (
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      startTime DATE NOT NULL,
-      endTime DATE NOT NULL,
+      startTime TIMESTAMP NOT NULL,
+      endTime TIMESTAMP NOT NULL,
       locationLink VARCHAR(4095) NOT NULL,
       dayReminderSent BOOLEAN NOT NULL,
       hourReminderSent BOOLEAN NOT NULL
@@ -70,7 +70,7 @@ async function seedTasks() {
     CREATE TABLE IF NOT EXISTS tasks (
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      dueDate DATE NOT NULL,
+      duedate TIMESTAMP NOT NULL,
       assignedId UUID NOT NULL,
       assignerId UUID NOT NULL,
       meetingId UUID NOT NULL,
