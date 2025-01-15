@@ -45,14 +45,16 @@ async function seedMeetings() {
       title VARCHAR(255) NOT NULL,
       startTime DATE NOT NULL,
       endTime DATE NOT NULL,
-      locationLink VARCHAR(4095) NOT NULL
+      locationLink VARCHAR(4095) NOT NULL,
+      dayReminderSent BOOLEAN NOT NULL,
+      hourReminderSent BOOLEAN NOT NULL
     );
   `;
 
   const insertedMeetings = await Promise.all(
     meetings.map(async (meeting) => {
       return client.sql`
-        INSERT INTO meetings (id, title, startTime, endTime, locationLink)
+        INSERT INTO meetings (id, title, startTime, endTime, locationLink, dayReminderSent, hourReminderSent)
         VALUES (${meeting.id}, ${meeting.title}, ${meeting.startTime}, ${meeting.endTime}, ${meeting.locationLink})
         ON CONFLICT (id) DO NOTHING;
       `;
@@ -70,16 +72,19 @@ async function seedTasks() {
       title VARCHAR(255) NOT NULL,
       dueDate DATE NOT NULL,
       assignedId UUID NOT NULL,
+      assignerId UUID NOT NULL,
       meetingId UUID NOT NULL,
       priority VARCHAR(255) NOT NULL, 
-      status VARCHAR(255) NOT NULL
+      status VARCHAR(255) NOT NULL,
+      dayReminderSent BOOLEAN NOT NULL,
+      hourReminderSent BOOLEAN NOT NULL
     );
   `;
 
   const insertedTasks = await Promise.all(
     tasks.map(async (task) => {
       return client.sql`
-        INSERT INTO tasks (id, title, duedate, assignedId, meetingId, priority, status)
+        INSERT INTO tasks (id, title, duedate, assignedId, assignerId, meetingId, priority, status, dayReminderSent, hourReminderSent)
         VALUES (${task.id}, ${task.title}, ${task.duedate}, ${task.assignedId}, ${task.meetingId}, ${task.priority}, ${task.status})
         ON CONFLICT (id) DO NOTHING;
       `;
