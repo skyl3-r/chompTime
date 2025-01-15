@@ -216,10 +216,10 @@ export async function GET() {
     await client.sql`BEGIN`;
     // await reset();
     await seedUsers();
-    await seedMeetings();
-    await seedParticipants();
-    await seedTasks();
-    await seedFinishedsummaries();
+    // await seedMeetings();
+    // await seedParticipants();
+    // await seedTasks();
+    // await seedFinishedsummaries();
     // await seedCustomers();
     // await seedInvoices();
     // await seedRevenue();
