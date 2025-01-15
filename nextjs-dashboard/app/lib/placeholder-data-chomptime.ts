@@ -4,12 +4,14 @@ const users = [
         name: 'User',
         email: 'user@nextmail.com',
         password: '123456',
+        xp: 100
       },
       {
         id: '3b23b83d-b8b0-4a3c-95d5-4f23b86b7c6c',
-        name: 'Person',
-        email: 'person@nextmail.com',
+        name: 'Skyler',
+        email: 'e1156938@u.nus.edu',
         password: '654321',
+        xp: 0
       }
 ]
 
@@ -94,3 +96,5 @@ const finishedsummaries = [
         "title": "Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
     },
 ]
+
+export {users, meetings, tasks, participants, finishedsummaries};
