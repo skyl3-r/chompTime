@@ -45,7 +45,7 @@ async function seedMeetings() {
       title VARCHAR(255) NOT NULL,
       startTime DATE NOT NULL,
       endTime DATE NOT NULL,
-      locationLink VARCHAR(511) NOT NULL
+      locationLink VARCHAR(4095) NOT NULL
     );
   `;
 
@@ -95,7 +95,7 @@ async function seedParticipants() {
     CREATE TABLE IF NOT EXISTS participants (
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       userId UUID NOT NULL,
-      meetingId UUID NOT NULL,
+      meetingId UUID NOT NULL
     );
   `;
 
@@ -118,7 +118,7 @@ async function seedFinishedsummaries() {
     CREATE TABLE IF NOT EXISTS finishedsummaries (
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       meetingId UUID NOT NULL,
-      description VARCHAR(511) NOT NULL,
+      description VARCHAR(4095) NOT NULL
     );
   `;
 
@@ -216,16 +216,16 @@ export async function GET() {
     await client.sql`BEGIN`;
     // await reset();
     await seedUsers();
-    // await seedMeetings();
-    // await seedParticipants();
-    // await seedTasks();
-    // await seedFinishedsummaries();
+    await seedMeetings();
+    await seedParticipants();
+    await seedTasks();
+    await seedFinishedsummaries();
     // await seedCustomers();
     // await seedInvoices();
     // await seedRevenue();
     await client.sql`COMMIT`;
 
-    return Response.json({ message: 'New database seeded successfully' });
+    return Response.json({ message: 'New new database seeded successfully' });
   } catch (error) {
     await client.sql`ROLLBACK`;
     return Response.json({ error }, { status: 500 });
