@@ -89,11 +89,11 @@ const finishedsummaries = [
     }, {
         "id": "98c6b676-34da-4b4f-9c60-a3ed7fa0d36f",
         "meetingId": "220a961c-75f3-4236-aeb7-225aeb8ebf00",
-        "title": "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
+        "description": "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
     }, {
         "id": "6d4a1417-4fd1-46a6-80de-97b1112f0bdf",
         "meetingId": "e7613b31-a285-4c3b-9d4a-f05f39682bea",
-        "title": "Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
+        "description": "Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
     },
 ]
 
