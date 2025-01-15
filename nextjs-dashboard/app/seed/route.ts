@@ -55,7 +55,7 @@ async function seedMeetings() {
     meetings.map(async (meeting) => {
       return client.sql`
         INSERT INTO meetings (id, title, startTime, endTime, locationLink, dayReminderSent, hourReminderSent)
-        VALUES (${meeting.id}, ${meeting.title}, ${meeting.startTime}, ${meeting.endTime}, ${meeting.locationLink})
+        VALUES (${meeting.id}, ${meeting.title}, ${meeting.startTime}, ${meeting.endTime}, ${meeting.locationLink}, ${meeting.dayReminderSent}, ${meeting.hourReminderSent})
         ON CONFLICT (id) DO NOTHING;
       `;
     }),
@@ -85,7 +85,7 @@ async function seedTasks() {
     tasks.map(async (task) => {
       return client.sql`
         INSERT INTO tasks (id, title, duedate, assignedId, assignerId, meetingId, priority, status, dayReminderSent, hourReminderSent)
-        VALUES (${task.id}, ${task.title}, ${task.duedate}, ${task.assignedId}, ${task.meetingId}, ${task.priority}, ${task.status})
+        VALUES (${task.id}, ${task.title}, ${task.duedate}, ${task.assignedId}, ${task.assignerId}, ${task.meetingId}, ${task.priority}, ${task.status}, ${task.dayReminderSent}, ${task.hourReminderSent})
         ON CONFLICT (id) DO NOTHING;
       `;
     }),
