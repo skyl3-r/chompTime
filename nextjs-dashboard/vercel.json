@@ -1,5 +1,6 @@
 {
     "buildCommand": "pnpm run build",
+    "ignoreCommand": "pnpm dlx turbo-ignore",
     "crons": [
       {
         "path": "/api/taskReminder/yes",
