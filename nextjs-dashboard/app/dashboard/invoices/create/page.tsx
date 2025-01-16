@@ -1,28 +1,29 @@
 import Form from '@/app/ui/invoices/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchCustomers } from '@/app/lib/data';
+import { fetchUsers, fetchMeetings } from '@/app/lib/data';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Create Invoice',
+    title: 'Create Task',
 }
 
 export default async function Page() {
-  const customers = await fetchCustomers();
+  const users = await fetchUsers();
+  const meetings = await fetchMeetings();
  
   return (
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Invoices', href: '/dashboard/invoices' },
+          { label: 'Task', href: '/dashboard/invoices' },
           {
-            label: 'Create Invoice',
+            label: 'Create Task',
             href: '/dashboard/invoices/create',
             active: true,
           },
         ]}
       />
-      <Form customers={customers} />
+      <Form users={users} meetings={meetings}/>
     </main>
   );
 }

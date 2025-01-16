@@ -3,7 +3,7 @@
 import {
   UserGroupIcon,
   HomeIcon,
-  DocumentDuplicateIcon,
+  TableCellsIcon,
 } from '@heroicons/react/24/outline';
 import { GiSharkFin } from "react-icons/gi";
 import Link from 'next/link';
@@ -15,9 +15,9 @@ import clsx from 'clsx';
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   {
-    name: 'Invoices',
+    name: 'Tasks',
     href: '/dashboard/invoices',
-    icon: DocumentDuplicateIcon,
+    icon: TableCellsIcon,
   },
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
 ];
