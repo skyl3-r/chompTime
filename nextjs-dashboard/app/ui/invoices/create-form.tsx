@@ -5,19 +5,16 @@ import Link from 'next/link';
 import {
   CheckIcon,
   ClockIcon,
-  CurrencyDollarIcon,
   UserCircleIcon,
-  CalendarIcon,
-  ExclamationCircleIcon,
   ComputerDesktopIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createInvoice, State } from '@/app/lib/actions';
+import { createTask, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
 export default function Form({ users, meetings }: { users: UserField[]; meetings: MeetingField[] }) {
   const initialState: State = { message: null, errors: {}};
-  const [state, formAction] = useActionState(createInvoice, initialState);
+  const [state, formAction] = useActionState(createTask, initialState);
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -144,16 +141,19 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
         {/* MeetingId */}
         <div className="mb-4">
           <label htmlFor="meeting" className="mb-2 block text-sm font-medium">
-            Choose assigned meeting (optional)
+            Choose assigned meeting
           </label>
           <div className="relative">
             <select
               id="meeting"
               name="meetingId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue="" // Default to no selection
-              aria-describedby="meeting-error"
+              defaultValue=""
+              aria-describedby='meeting-error'
             >
+              <option value="" disabled>
+                Select an assigned meeting
+              </option>
               {meetings.map((meeting) => (
                 <option key={meeting.id} value={meeting.id}>
                   {meeting.title}
@@ -163,13 +163,13 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
             <ComputerDesktopIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
           <div id="meeting-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.meetingId &&
-              state.errors.meetingId.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
+          {state.errors?.assignedId &&
+            state.errors.assignedId.map((error: string) => (
+              <p className="mt-2 text-sm text-red-500" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
         </div>
 
         {/* Task Priority */}

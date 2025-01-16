@@ -46,8 +46,8 @@ const FormSchema = z.object({
     hourReminderSent: z.boolean().default(false),
   });
    
-const CreateInvoice = FormSchema.omit({ id: true });
-const UpdateInvoice = FormSchema.omit({id: true }); 
+const CreateTask = FormSchema.omit({ id: true });
+const UpdateTask = FormSchema.omit({id: true }); 
 
 export type State = {
     errors?: {
@@ -66,8 +66,8 @@ export type State = {
     };
     message?: string | null;
 };
-export async function createInvoice(prevState: State, formData: FormData) {
-  const validatedFields = CreateInvoice.safeParse({
+export async function createTask(prevState: State, formData: FormData) {
+  const validatedFields = CreateTask.safeParse({
     // customerId: formData.get('customerId'),
     // amount: formData.get('amount'),
     // status: formData.get('status'),
@@ -111,8 +111,8 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect('/dashboard/invoices');
 }
 
-export async function updateInvoice(id: string, prevState: State, formData: FormData) {
-    const validatedFields = UpdateInvoice.safeParse({
+export async function updateTask(id: string, prevState: State, formData: FormData) {
+    const validatedFields = UpdateTask.safeParse({
       // customerId: formData.get('customerId'),
       // amount: formData.get('amount'),
       // status: formData.get('status'),
@@ -153,7 +153,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     redirect('/dashboard/invoices');
   }
   
-  export async function deleteInvoice(id: string, prevState: State) {
+  export async function deleteTask(id: string, prevState: State) {
     try {
         await sql`DELETE FROM tasks WHERE id = ${id}`;
         revalidatePath('/dashboard/invoices');
