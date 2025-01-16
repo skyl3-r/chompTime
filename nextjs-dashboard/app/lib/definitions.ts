@@ -122,3 +122,13 @@ export type TaskForm = {
   priority: 'low' | 'medium'| 'high';
   status: 'pending' | 'completed';
 };
+
+export type FullMeetingField = {
+  id: string;
+  title: string;
+  starttime: string;
+  endtime: string;
+  locationlink: string;
+  dayremindersent: boolean;
+  hourremindersent: boolean;
+};

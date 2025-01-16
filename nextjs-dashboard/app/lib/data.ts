@@ -3,6 +3,7 @@ import {
   UserField,
   // CustomerField,
   MeetingField,
+  FullMeetingField,
   CustomersTableType,
   // InvoiceForm,
   TaskForm,
@@ -293,6 +294,21 @@ export async function fetchMeetings() {
         title
       FROM meetings
       ORDER BY title ASC
+    `;
+
+    const meetings = data.rows;
+    return meetings;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all meetings.');
+  }
+}
+
+export async function fetchFullMeetings() {
+  try {
+    const data = await sql<FullMeetingField>`
+      SELECT *
+      FROM meetings
     `;
 
     const meetings = data.rows;
