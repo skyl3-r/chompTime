@@ -55,6 +55,21 @@ export type InvoicesTable = {
   status: 'pending' | 'paid';
 };
 
+export type TasksTable = {
+  id: string;
+  title: string;
+  duedate: string;
+  assignedId: string;
+  assignerId: string;
+  name: string;
+  meetingId: string;
+  meetingtitle: string;
+  assignedname: string;
+  assignername: string;
+  priority: 'low' | 'medium'| 'high';
+  status: 'pending' | 'completed';
+};
+
 export type CustomersTableType = {
   id: string;
   name: string;
@@ -75,14 +90,35 @@ export type FormattedCustomersTable = {
   total_paid: string;
 };
 
-export type CustomerField = {
+export type UserField = {
   id: string;
   name: string;
 };
 
-export type InvoiceForm = {
+// export type CustomerField = {
+//   id: string;
+//   name: string;
+// };
+
+export type MeetingField = {
   id: string;
-  customer_id: string;
-  amount: number;
-  status: 'pending' | 'paid';
+  title: string;
+};
+
+// export type InvoiceForm = {
+//   id: string;
+//   customer_id: string;
+//   amount: number;
+//   status: 'pending' | 'paid';
+// };
+
+export type TaskForm = {
+  id: string;
+  title: string;
+  duedate: string;
+  assignedId: string;
+  assignerId: string;
+  meetingId: string;
+  priority: 'low' | 'medium'| 'high';
+  status: 'pending' | 'completed';
 };

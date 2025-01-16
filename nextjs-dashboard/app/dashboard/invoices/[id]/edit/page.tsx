@@ -1,6 +1,6 @@
-import Form from '@/app/ui/invoices/edit-form';
+import Form from '@/app/ui/invoices/edit-form'; // imports "EditInvoiceForm"
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
+import { fetchTaskById, fetchUsers, fetchMeetings } from '@/app/lib/data';
 import { notFound } from 'next/navigation'; 
 import { Metadata } from 'next';
 
@@ -11,12 +11,13 @@ export const metadata: Metadata = {
 export default async function Page(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     const id = params.id;
-    const [invoice, customers] = await Promise.all([
-        fetchInvoiceById(id),
-        fetchCustomers(),
+    const [task, users, meetings] = await Promise.all([
+        fetchTaskById(id),
+        fetchUsers(),
+        fetchMeetings(),
     ]);
 
-    if (!invoice) {
+    if (!task) {
         notFound();
     }
   return (
@@ -31,7 +32,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form invoice={invoice} customers={customers} />
+      <Form task={task} users={users} meetings={meetings} />
     </main>
   );
 }
