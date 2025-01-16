@@ -1,9 +1,14 @@
 import { sql } from "@vercel/postgres";
 import { sendEmail } from "@/app/lib/emailService";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export const config = {
+    runtime: 'edge',
+}
 
+export default async function handler(req: NextRequest) {
+    // const cron = req.nextUrl.pathname.split('/')[3]
+    // if (!cron) return new Response('No cron provided', { status: 400 });
     try {
         // fetch tasks due in one hour
         const taskHourReminders = await sql`
@@ -45,6 +50,10 @@ export async function GET() {
             WHERE id = ${d.id}
             `;
         }
+
+        // fetch meetings in one hour
+
+        // fetch meetings in one day
 
         return new NextResponse("Reminders processed successfully", {status: 200});
     } catch (error) {
