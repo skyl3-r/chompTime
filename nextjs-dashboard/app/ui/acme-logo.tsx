@@ -1,4 +1,5 @@
-import { GlobeAltIcon } from '@heroicons/react/24/outline';
+// import { GlobeAltIcon } from '@heroicons/react/24/outline';
+import { GiSharkFin } from "react-icons/gi";
 import { lusitana } from '@/app/ui/fonts';
 
 export default function AcmeLogo() {
@@ -6,8 +7,8 @@ export default function AcmeLogo() {
     <div
       className={`${lusitana.className} flex flex-row items-center leading-none text-white`}
     >
-      <GlobeAltIcon className="h-12 w-12 rotate-[15deg]" />
-      <p className="text-[44px]">Acme</p>
+      <GiSharkFin className="h-12 w-12 rotate-[10deg] mr-2" />
+      <p className="flex text-[35px]">Chomp Time</p>
     </div>
   );
 }
