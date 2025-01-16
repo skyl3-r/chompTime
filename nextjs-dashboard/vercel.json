@@ -1,7 +1,9 @@
 {
     "buildCommand": "pnpm run build",
-    "crons": [{
-        "path": "/api/cron/yes",
-        "schedule": "*/10 * * * *"
-    }]
+    "crons": [
+        {
+            "path": "/api/cron",
+            "schedule": "*/10 * * * *"
+        }
+    ]
 }
