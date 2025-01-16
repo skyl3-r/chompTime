@@ -177,3 +177,36 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
       throw error;
     }
   }
+
+  export async function register(
+    prevState: string | undefined,
+    formData: FormData,
+  ) {
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    try {
+      const result = await sql`SELECT * FROM users WHERE email = ${email}`;
+      if (result.rows.length > 0) {
+        return "Email already in use."
+      }
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; // Dynamic or fallback
+      const response = await fetch(`${baseUrl}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify( {name, email, password}),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      console.log("Registration success", response);
+    } catch (error: any) {
+      console.error("Registration failed", error);
+      return "Something went wrong"
+    }
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
+  }
