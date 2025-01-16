@@ -60,11 +60,12 @@ export type TasksTable = {
   title: string;
   duedate: string;
   assignedId: string;
+  assignerId: string;
   name: string;
-  email: string;
   meetingId: string;
-  meetingTitle: string;
-  locationLink: string;
+  meetingtitle: string;
+  assignedname: string;
+  assignername: string;
   priority: 'low' | 'medium'| 'high';
   status: 'pending' | 'completed';
 };
@@ -116,6 +117,7 @@ export type TaskForm = {
   title: string;
   duedate: string;
   assignedId: string;
+  assignerId: string;
   meetingId: string;
   priority: 'low' | 'medium'| 'high';
   status: 'pending' | 'completed';

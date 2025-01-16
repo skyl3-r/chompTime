@@ -30,15 +30,20 @@ const FormSchema = z.object({
     assignedId: z.string({
         invalid_type_error: "Please assign the task to someone.",
     }), // Assigned ID must be a string.
+    assignerId: z.string({
+      invalid_type_error: "Please choose the assigner.",
+    }), // Assigner ID must be a string.
     meetingId: z.string({
-        invalid_type_error: "Please associate this invoice with a meeting.",
+        invalid_type_error: "Please associate this task with a meeting.",
     }), // Meeting ID must be a string.
     priority: z.enum(['low', 'medium', 'high'], {
         invalid_type_error: "Please select a valid priority level.",
     }), // Priority must be one of 'low', 'medium', or 'high'.
     status: z.enum(['pending', 'paid'], {
-        invalid_type_error: "Please select an invoice status.",
+        invalid_type_error: "Please select an task status.",
     }), // Status must be 'pending' or 'paid'.
+    dayReminderSent: z.boolean().default(false),
+    hourReminderSent: z.boolean().default(false),
   });
    
 const CreateInvoice = FormSchema.omit({ id: true });
@@ -54,6 +59,7 @@ export type State = {
         title?: string[];
         duedate?: string[];
         assignedId?: string[];
+        assignerId?: string[];
         meetingId?: string[];
         priority?: string[];
         status?: string[];
@@ -69,6 +75,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     title: formData.get('title'),
     duedate: formData.get('duedate'),
     assignedId: formData.get('assignedId'),
+    assignerId: formData.get('assignerId'),
     meetingId: formData.get('meetingId'),
     priority: formData.get('priority'),
     status: formData.get('status'),
@@ -82,14 +89,18 @@ export async function createInvoice(prevState: State, formData: FormData) {
   }
 
   // const { customerId, title, amount, status } = validatedFields.data;
-  const { title, duedate, assignedId, meetingId, priority, status } = validatedFields.data;
+  const { title, duedate, assignedId, assignerId, meetingId, priority, status } = validatedFields.data;
   // const amountInCents = amount * 100;
   // const date = new Date().toISOString().split('T')[0];
 
   try {
+    console.log('Validated Data:', {
+      title, duedate, assignedId, assignerId, meetingId, priority, status
+    });
+    
     await sql`
-        INSERT INTO tasks (title, duedate, assignedId, meetingId, priority, status)
-        VALUES (${title}, ${duedate}, ${assignedId}, ${meetingId}, ${priority}, ${status})
+        INSERT INTO tasks (title, duedate, assignedId, assignerId, meetingId, priority, status, dayReminderSent, hourReminderSent)
+        VALUES (${title}, ${duedate}, ${assignedId}, ${assignerId},  ${meetingId}, ${priority}, ${status}, false, false)
     `;
   } catch (error) {
     return {
@@ -97,7 +108,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     }
   }
   revalidatePath('/dashboard/invoices');
-  redirect('dashboard/invoices');
+  redirect('/dashboard/invoices');
 }
 
 export async function updateInvoice(id: string, prevState: State, formData: FormData) {
@@ -108,6 +119,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
       title: formData.get('title'),
       duedate: formData.get('duedate'),
       assignedId: formData.get('assignedId'),
+      assignerId: formData.get('assignerId'),
       meetingId: formData.get('meetingId'),
       priority: formData.get('priority'),
       status: formData.get('status'),
@@ -116,18 +128,18 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Update Invoice.',
+            message: 'Missing Fields. Failed to Update Task.',
         };
     }
    
     // const { customerId, amount, status } = validatedFields.data;
-    const { title, duedate, assignedId, meetingId, priority, status } = validatedFields.data;
+    const { title, duedate, assignedId, assignerId, meetingId, priority, status } = validatedFields.data;
     // const amountInCents = amount * 100;
    
     try {
         await sql`
-        UPDATE invoices
-        SET title = ${title}, duedate = ${duedate}, assignedId = ${assignedId}, meetingId = ${meetingId}, priority = ${priority}, status = ${status}
+        UPDATE tasks
+        SET title = ${title}, duedate = ${duedate}, assignedId = ${assignedId}, assignerId = ${assignerId}, meetingId = ${meetingId}, priority = ${priority}, status = ${status}
         WHERE id = ${id}
         `;
     } catch (error) {

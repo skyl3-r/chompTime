@@ -33,7 +33,7 @@ export default async function InvoicesTable({
                   Assigned To
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Email
+                  Assigner
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Meeting Title
@@ -64,13 +64,13 @@ export default async function InvoicesTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {task.name}
+                    {task.assignedname}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {task.email}
+                    {task.assignername}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {task.locationLink}
+                    {task.meetingtitle}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(task.duedate)}

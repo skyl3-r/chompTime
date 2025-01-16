@@ -23,7 +23,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form users={users}meetings={meetings}/>
+      <Form users={users} meetings={meetings}/>
     </main>
   );
 }

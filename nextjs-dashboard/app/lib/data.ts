@@ -138,23 +138,24 @@ export async function fetchFilteredTasks(
         tasks.title,
         tasks.duedate, 
         tasks.assignedId,
+        tasks.assignerId,
         tasks.meetingId,
         tasks.priority, 
         tasks.status,
-        users.name,
-        users.email,
-        meetings.locationLink,
-        meetings.title AS meetingTitle
+        assigner.name AS assignername,
+        assigned.name AS assignedname,
+        meetings.title AS meetingtitle
       FROM tasks
-      JOIN users ON tasks.assignedId = users.id
+      JOIN users AS assigner ON tasks.assignerId = assigner.id
+      JOIN users AS assigned ON tasks.assignedId = assigned.id
       JOIN meetings ON tasks.meetingId = meetings.id
       WHERE
-        users.name ILIKE ${`%${query}%`} OR
-        users.email ILIKE ${`%${query}%`} OR
+        assigner.name ILIKE ${`%${query}%`} OR
+        assigned.name ILIKE ${`%${query}%`} OR
         meetings.title ILIKE ${`%${query}%`} OR
-        meetings.locationLink ILIKE ${`%${query}%`} OR
         tasks.title ILIKE ${`%${query}%`} OR
         tasks.assignedId::text ILIKE ${`%${query}%`} OR
+        tasks.assignerId::text ILIKE ${`%${query}%`} OR
         tasks.meetingId::text ILIKE ${`%${query}%`} OR
         tasks.priority ILIKE ${`%${query}%`} OR
         tasks.duedate::text ILIKE ${`%${query}%`} OR
@@ -171,26 +172,26 @@ export async function fetchFilteredTasks(
 }
 
 
-export async function fetchInvoicesPages(query: string) {
-  try {
-    const count = await sql`SELECT COUNT(*)
-    FROM invoices
-    JOIN customers ON invoices.customer_id = customers.id
-    WHERE
-      customers.name ILIKE ${`%${query}%`} OR
-      customers.email ILIKE ${`%${query}%`} OR
-      invoices.amount::text ILIKE ${`%${query}%`} OR
-      invoices.date::text ILIKE ${`%${query}%`} OR
-      invoices.status ILIKE ${`%${query}%`}
-  `;
+// export async function fetchInvoicesPages(query: string) {
+//   try {
+//     const count = await sql`SELECT COUNT(*)
+//     FROM invoices
+//     JOIN customers ON invoices.customer_id = customers.id
+//     WHERE
+//       customers.name ILIKE ${`%${query}%`} OR
+//       customers.email ILIKE ${`%${query}%`} OR
+//       invoices.amount::text ILIKE ${`%${query}%`} OR
+//       invoices.date::text ILIKE ${`%${query}%`} OR
+//       invoices.status ILIKE ${`%${query}%`}
+//   `;
 
-    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of invoices.');
-  }
-}
+//     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+//     return totalPages;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch total number of invoices.');
+//   }
+// }
 
 export async function fetchTasksPages(query: string) {
   try {
@@ -202,6 +203,7 @@ export async function fetchTasksPages(query: string) {
       users.email ILIKE ${`%${query}%`} OR
       tasks.title ILIKE ${`%${query}%`} OR
       tasks.assignedId::text ILIKE ${`%${query}%`} OR
+      tasks.assignerId::text ILIKE ${`%${query}%`} OR
       tasks.meetingId::text ILIKE ${`%${query}%`} OR
       tasks.priority ILIKE ${`%${query}%`} OR
       tasks.duedate::text ILIKE ${`%${query}%`} OR
@@ -249,6 +251,7 @@ export async function fetchTaskById(id: string) {
         tasks.title,
         tasks.duedate,
         tasks.assignedId,
+        tasks.assignerId,
         tasks.meetingId,
         tasks.priority,
         tasks.status

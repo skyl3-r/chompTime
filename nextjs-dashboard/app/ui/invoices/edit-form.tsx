@@ -29,7 +29,6 @@ export default function EditInvoiceForm({
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-
         {/* Task Title */}
         <div className="mb-4">
           <label htmlFor="title" className="mb-2 block text-sm font-medium">
@@ -58,7 +57,11 @@ export default function EditInvoiceForm({
             id="duedate"
             name="duedate"
             type="datetime-local"
-            defaultValue={task.duedate}
+            defaultValue={
+              task.duedate
+                ? new Date(task.duedate).toISOString().slice(0, 16)
+                : ""
+            }
             placeholder="Enter due date and time"
             className="block w-full rounded-md border border-gray-200 py-2 px-4 text-sm outline-2 placeholder:text-gray-500"
           />
@@ -74,10 +77,35 @@ export default function EditInvoiceForm({
               id="user"
               name="assignedId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={task.assignedId}
+              defaultValue={String(task.assignedId)}
             >
               <option value="" disabled>
                 Select a assigned user
+              </option>
+              {users.map((user) => (
+                <option key={user.id} value={String(user.id)}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+        </div>
+
+        {/* Assigner Id */}
+        <div className="mb-4">
+          <label htmlFor="user" className="mb-2 block text-sm font-medium">
+            Choose assigner
+          </label>
+          <div className="relative">
+            <select
+              id="user"
+              name="assignerId"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue={task.assignerId}
+            >
+              <option value="" disabled>
+                Select a assigner
               </option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
