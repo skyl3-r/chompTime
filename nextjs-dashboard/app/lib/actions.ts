@@ -39,9 +39,9 @@ const FormSchema = z.object({
     priority: z.enum(['low', 'medium', 'high'], {
         invalid_type_error: "Please select a valid priority level.",
     }), // Priority must be one of 'low', 'medium', or 'high'.
-    status: z.enum(['pending', 'paid'], {
+    status: z.enum(['pending', 'completed'], {
         invalid_type_error: "Please select an task status.",
-    }), // Status must be 'pending' or 'paid'.
+    }), // Status must be 'pending' or 'completed'.
     dayReminderSent: z.boolean().default(false),
     hourReminderSent: z.boolean().default(false),
   });
@@ -100,7 +100,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     
     await sql`
         INSERT INTO tasks (title, duedate, assignedId, assignerId, meetingId, priority, status, dayReminderSent, hourReminderSent)
-        VALUES (${title}, ${duedate}, ${assignedId}, ${assignerId},  ${meetingId}, ${priority}, ${status}, false, false)
+        VALUES (${title}, ${duedate}, ${assignedId}, ${assignerId}, ${meetingId}, ${priority}, ${status}, false, false)
     `;
   } catch (error) {
     return {
@@ -137,6 +137,9 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     // const amountInCents = amount * 100;
    
     try {
+      console.log('Validated Data:', {
+        title, duedate, assignedId, assignerId, meetingId, priority, status
+      });
         await sql`
         UPDATE tasks
         SET title = ${title}, duedate = ${duedate}, assignedId = ${assignedId}, assignerId = ${assignerId}, meetingId = ${meetingId}, priority = ${priority}, status = ${status}

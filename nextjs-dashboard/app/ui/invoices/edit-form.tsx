@@ -6,6 +6,7 @@ import {
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
+  ComputerDesktopIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
@@ -81,7 +82,7 @@ export default function EditInvoiceForm({
               
             >
               <option value="" disabled>
-                Select a assigned user
+                Select an assigned user
               </option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
@@ -106,7 +107,7 @@ export default function EditInvoiceForm({
               defaultValue={task.assignerid}
             >
               <option value="" disabled>
-                Select a assigner
+                Select an assigner
               </option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
@@ -132,7 +133,7 @@ export default function EditInvoiceForm({
               defaultValue={task.meetingid}
             >
               <option value="" disabled>
-                Select a assigned meeting
+                Select an assigned meeting
               </option>
               {meetings.map((meeting) => (
                 <option key={meeting.id} value={meeting.id}>
@@ -140,14 +141,14 @@ export default function EditInvoiceForm({
                 </option>
               ))}
             </select>
-            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <ComputerDesktopIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
         {/* Task Priority */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Set the invoice status
+            Set the task priority
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
@@ -164,7 +165,7 @@ export default function EditInvoiceForm({
                   htmlFor="low"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Low <ClockIcon className="h-4 w-4" />
+                  Low
                 </label>
               </div>
 
@@ -179,9 +180,9 @@ export default function EditInvoiceForm({
                 />
                 <label
                   htmlFor="medium"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Medium <CheckIcon className="h-4 w-4" />
+                  Medium
                 </label>
               </div>
 
@@ -196,9 +197,9 @@ export default function EditInvoiceForm({
                 />
                 <label
                   htmlFor="high"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  High <CheckIcon className="h-4 w-4" />
+                  High
                 </label>
               </div>
 
@@ -209,7 +210,7 @@ export default function EditInvoiceForm({
         {/* Task Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Set the invoice status
+            Set the task status
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">

@@ -9,6 +9,7 @@ import {
   UserCircleIcon,
   CalendarIcon,
   ExclamationCircleIcon,
+  ComputerDesktopIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createInvoice, State } from '@/app/lib/actions';
@@ -86,7 +87,7 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
               aria-describedby='user-error'
             >
               <option value="" disabled>
-                Select a assigned user
+                Select an assigned user
               </option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
@@ -120,7 +121,7 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
               aria-describedby='user-error'
             >
               <option value="" disabled>
-                Select a assigner
+                Select an assigner
               </option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
@@ -143,35 +144,32 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
         {/* MeetingId */}
         <div className="mb-4">
           <label htmlFor="meeting" className="mb-2 block text-sm font-medium">
-            Choose assigned meeting
+            Choose assigned meeting (optional)
           </label>
           <div className="relative">
             <select
               id="meeting"
               name="meetingId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue=""
-              aria-describedby='meeting-error'
+              defaultValue="" // Default to no selection
+              aria-describedby="meeting-error"
             >
-              <option value="" disabled>
-                Select a assigned meeting
-              </option>
               {meetings.map((meeting) => (
                 <option key={meeting.id} value={meeting.id}>
                   {meeting.title}
                 </option>
               ))}
             </select>
-            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <ComputerDesktopIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
           <div id="meeting-error" aria-live="polite" aria-atomic="true">
-          {state.errors?.assignedId &&
-            state.errors.assignedId.map((error: string) => (
-              <p className="mt-2 text-sm text-red-500" key={error}>
-                {error}
-              </p>
-            ))}
-        </div>
+            {state.errors?.meetingId &&
+              state.errors.meetingId.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
         </div>
 
         {/* Task Priority */}
@@ -194,7 +192,7 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
                   htmlFor="low"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Low <ClockIcon className="h-4 w-4" />
+                  Low
                 </label>
               </div>
               <div className="flex items-center">
@@ -210,7 +208,7 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
                   htmlFor="medium"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Medium <CheckIcon className="h-4 w-4" />
+                  Medium
                 </label>
               </div>
               <div className="flex items-center">
@@ -226,7 +224,7 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
                   htmlFor="high"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  High <ClockIcon className="h-4 w-4" />
+                  High
                 </label>
               </div>
             </div>
@@ -276,7 +274,7 @@ export default function Form({ users, meetings }: { users: UserField[]; meetings
                 />
                 <label
                   htmlFor="completed"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Completed <CheckIcon className="h-4 w-4" />
                 </label>
