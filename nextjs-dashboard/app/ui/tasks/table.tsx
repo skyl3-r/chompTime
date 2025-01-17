@@ -1,10 +1,10 @@
-import { UpdateTask, DeleteTask } from '@/app/ui/invoices/buttons';
-import TaskStatus from '@/app/ui/invoices/status';
-import TaskPriority from '@/app/ui/invoices/priority';
+import { UpdateTask, DeleteTask } from '@/app/ui/tasks/buttons';
+import TaskStatus from '@/app/ui/tasks/status';
+import TaskPriority from '@/app/ui/tasks/priority';
 import { formatDateToLocal } from '@/app/lib/utils';
 import { fetchFilteredTasks } from '@/app/lib/data';
 
-export default async function InvoicesTable({
+export default async function TasksTable({
   query,
   currentPage,
 }: {

@@ -1,11 +1,11 @@
-import Form from '@/app/ui/invoices/edit-form'; // imports "EditTaskForm"
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
+import Form from '@/app/ui/tasks/edit-form'; // imports "EditTaskForm"
+import Breadcrumbs from '@/app/ui/tasks/breadcrumbs';
 import { fetchTaskById, fetchUsers, fetchMeetings } from '@/app/lib/data';
 import { notFound } from 'next/navigation'; 
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Edit Invoice',
+    title: 'Edit Task',
 }
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
@@ -24,10 +24,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Invoices', href: '/dashboard/invoices' },
+          { label: 'Tasks', href: '/dashboard/tasks' },
           {
-            label: 'Edit Invoice',
-            href: `/dashboard/invoices/${id}/edit`,
+            label: 'Edit Task',
+            href: `/dashboard/tasks/${id}/edit`,
             active: true,
           },
         ]}

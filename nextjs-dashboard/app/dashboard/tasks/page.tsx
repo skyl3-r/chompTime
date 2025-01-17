@@ -1,7 +1,7 @@
-import Pagination from '@/app/ui/invoices/pagination';
+import Pagination from '@/app/ui/tasks/pagination';
 import Search from '@/app/ui/search';
-import Table from '@/app/ui/invoices/table';
-import { CreateTask } from '@/app/ui/invoices/buttons';
+import Table from '@/app/ui/tasks/table';
+import { CreateTask } from '@/app/ui/tasks/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import { fetchTasksPages } from '@/app/lib/data';

@@ -83,8 +83,8 @@ export async function createTask(prevState: State, formData: FormData) {
         message: 'Database Error: Failed to Create Task.',
     }
   }
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  revalidatePath('/dashboard/tasks');
+  redirect('/dashboard/tasks');
 }
 
 export async function updateTask(id: string, prevState: State, formData: FormData) {
@@ -120,14 +120,14 @@ export async function updateTask(id: string, prevState: State, formData: FormDat
         return { message: 'Database Error: Failed to Update Task.' };
     }
    
-    revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    revalidatePath('/dashboard/tasks');
+    redirect('/dashboard/tasks');
   }
   
   export async function deleteTask(id: string, prevState: State) {
     try {
         await sql`DELETE FROM tasks WHERE id = ${id}`;
-        revalidatePath('/dashboard/invoices');
+        revalidatePath('/dashboard/tasks');
     } catch (error) {
         return { message: 'Database Error: Failed to Delete Task.'};
     }

@@ -7,7 +7,7 @@ export async function deleteTaskFromForm(formData: FormData) {
   const initialState: State = {message: null, errors: {}};
   
   if (!id) {
-    console.error('Error: Missing invoice ID.');
+    console.error('Error: Missing task ID.');
     return;
   }
   await deleteTask(id, initialState);  // Assuming deleteTask handles logging and messages.
