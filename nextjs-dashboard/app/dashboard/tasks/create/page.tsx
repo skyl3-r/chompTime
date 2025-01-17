@@ -1,5 +1,5 @@
-import Form from '@/app/ui/invoices/create-form';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
+import Form from '@/app/ui/tasks/create-form';
+import Breadcrumbs from '@/app/ui/tasks/breadcrumbs';
 import { fetchUsers, fetchMeetings } from '@/app/lib/data';
 import { Metadata } from 'next';
 
@@ -15,10 +15,10 @@ export default async function Page() {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Task', href: '/dashboard/invoices' },
+          { label: 'Task', href: '/dashboard/tasks' },
           {
             label: 'Create Task',
-            href: '/dashboard/invoices/create',
+            href: '/dashboard/tasks/create',
             active: true,
           },
         ]}

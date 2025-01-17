@@ -1,7 +1,7 @@
-import Pagination from '@/app/ui/invoices/pagination';
+import Pagination from '@/app/ui/tasks/pagination';
 import Search from '@/app/ui/search';
-import Table from '@/app/ui/invoices/table';
-import { CreateInvoice } from '@/app/ui/invoices/buttons';
+import Table from '@/app/ui/tasks/table';
+import { CreateTask } from '@/app/ui/tasks/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import { fetchTasksPages } from '@/app/lib/data';
@@ -28,7 +28,7 @@ export default async function Page(props: {
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search tasks..." />
-        <CreateInvoice />
+        <CreateTask />
       </div>
        <Suspense key={query + currentPage}>
         <Table query={query} currentPage={currentPage} />

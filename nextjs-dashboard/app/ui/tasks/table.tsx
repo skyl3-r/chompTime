@@ -1,20 +1,16 @@
-import Image from 'next/image';
-import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
-// import InvoiceStatus from '@/app/ui/invoices/status';
-import TaskStatus from '@/app/ui/invoices/status';
-import TaskPriority from '@/app/ui/invoices/priority';
-import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-// import { fetchFilteredInvoices } from '@/app/lib/data';
+import { UpdateTask, DeleteTask } from '@/app/ui/tasks/buttons';
+import TaskStatus from '@/app/ui/tasks/status';
+import TaskPriority from '@/app/ui/tasks/priority';
+import { formatDateToLocal } from '@/app/lib/utils';
 import { fetchFilteredTasks } from '@/app/lib/data';
 
-export default async function InvoicesTable({
+export default async function TasksTable({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
 }) {
-  // const invoices = await fetchFilteredInvoices(query, currentPage);
   const tasks = await fetchFilteredTasks(query, currentPage);
 
   return (
@@ -83,8 +79,8 @@ export default async function InvoicesTable({
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={task.id} />
-                      <DeleteInvoice id={task.id} />
+                      <UpdateTask id={task.id} />
+                      <DeleteTask id={task.id} />
                     </div>
                   </td>
                 </tr>
@@ -124,8 +120,8 @@ export default async function InvoicesTable({
                     <p>{formatDateToLocal(task.duedate)}</p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdateInvoice id={task.id} />
-                    <DeleteInvoice id={task.id} />
+                    <UpdateTask id={task.id} />
+                    <DeleteTask id={task.id} />
                   </div>
                 </div>
               </div>

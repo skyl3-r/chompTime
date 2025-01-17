@@ -13,18 +13,6 @@ const LoginSchema = z.object({
 });
 
 const FormSchema = z.object({
-    // id: z.string(),
-    // customerId: z.string({
-    //     invalid_type_error: "Please select a customer.",
-    // }),
-    // amount: z.coerce.number()
-    // .gt(0, { message: 'Please enter an amount greater than $0.'}),
-    // status: z.enum(['pending', 'paid'], {
-    //     invalid_type_error: "Please select an invoice status."
-    // }),
-    // date: z.string(),
-
-
     id: z.string(),
     title: z.string({
         invalid_type_error: "Please enter a title.",
@@ -56,11 +44,6 @@ const UpdateTask = FormSchema.omit({id: true });
 
 export type State = {
     errors?: {
-        // customerId?: string[];
-        // amount?: string[];
-        // status?: string[];
-
-        // id?: string[];
         title?: string[];
         duedate?: string[];
         assignedId?: string[];
@@ -73,10 +56,6 @@ export type State = {
 };
 export async function createTask(prevState: State, formData: FormData) {
   const validatedFields = CreateTask.safeParse({
-    // customerId: formData.get('customerId'),
-    // amount: formData.get('amount'),
-    // status: formData.get('status'),
-
     title: formData.get('title'),
     duedate: formData.get('duedate'),
     assignedId: formData.get('assignedId'),
@@ -93,10 +72,7 @@ export async function createTask(prevState: State, formData: FormData) {
     };
   }
 
-  // const { customerId, title, amount, status } = validatedFields.data;
   const { title, duedate, assignedId, assignerId, meetingId, priority, status } = validatedFields.data;
-  // const amountInCents = amount * 100;
-  // const date = new Date().toISOString().split('T')[0];
 
   try {
     console.log('Validated Data:', {
@@ -112,15 +88,12 @@ export async function createTask(prevState: State, formData: FormData) {
         message: 'Database Error: Failed to Create Task.',
     }
   }
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  revalidatePath('/dashboard/tasks');
+  redirect('/dashboard/tasks');
 }
 
 export async function updateTask(id: string, prevState: State, formData: FormData) {
     const validatedFields = UpdateTask.safeParse({
-      // customerId: formData.get('customerId'),
-      // amount: formData.get('amount'),
-      // status: formData.get('status'),
       title: formData.get('title'),
       duedate: formData.get('duedate'),
       assignedId: formData.get('assignedId'),
@@ -137,9 +110,7 @@ export async function updateTask(id: string, prevState: State, formData: FormDat
         };
     }
    
-    // const { customerId, amount, status } = validatedFields.data;
     const { title, duedate, assignedId, assignerId, meetingId, priority, status } = validatedFields.data;
-    // const amountInCents = amount * 100;
    
     try {
       console.log('Validated Data:', {
@@ -154,14 +125,14 @@ export async function updateTask(id: string, prevState: State, formData: FormDat
         return { message: 'Database Error: Failed to Update Task.' };
     }
    
-    revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    revalidatePath('/dashboard/tasks');
+    redirect('/dashboard/tasks');
   }
   
-  export async function deleteInvoice(id: string, prevState: State) {
+  export async function deleteTask(id: string, prevState: State) {
     try {
         await sql`DELETE FROM tasks WHERE id = ${id}`;
-        revalidatePath('/dashboard/invoices');
+        revalidatePath('/dashboard/tasks');
     } catch (error) {
         return { message: 'Database Error: Failed to Delete Task.'};
     }
