@@ -80,6 +80,9 @@ importers:
       react-icons:
         specifier: ^5.4.0
         version: 5.4.0(react@19.0.0)
+      styled”:
+        specifier: link:“@emotion/styled”
+        version: link:“@emotion/styled”
       react-modal:
         specifier: ^3.16.3
         version: 3.16.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
