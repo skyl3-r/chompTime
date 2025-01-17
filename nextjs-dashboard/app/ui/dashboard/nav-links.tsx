@@ -18,7 +18,7 @@ const links = [
   { name: 'Calendar', href: '/dashboard', icon: FaRegCalendarAlt },
   {
     name: 'Tasks',
-    href: '/dashboard/invoices',
+    href: '/dashboard/tasks',
     icon: GoTasklist,
   },
   { name: 'XP', href: '/dashboard/customers', icon: FaGamepad },
