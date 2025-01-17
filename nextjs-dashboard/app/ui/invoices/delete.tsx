@@ -10,6 +10,5 @@ export async function deleteInvoiceFromForm(formData: FormData) {
     console.error('Error: Missing invoice ID.');
     return;
   }
-
   await deleteInvoice(id, initialState);  // Assuming deleteInvoice handles logging and messages.
 }

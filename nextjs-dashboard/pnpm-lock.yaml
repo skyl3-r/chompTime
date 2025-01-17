@@ -68,6 +68,9 @@ importers:
       react-icons:
         specifier: ^5.4.0
         version: 5.4.0(react@19.0.0)
+      styled”:
+        specifier: link:“@emotion/styled”
+        version: link:“@emotion/styled”
       tailwindcss:
         specifier: 3.4.16
         version: 3.4.16
