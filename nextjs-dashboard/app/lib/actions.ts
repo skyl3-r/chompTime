@@ -7,19 +7,12 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
+const LoginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
 const FormSchema = z.object({
-    // id: z.string(),
-    // customerId: z.string({
-    //     invalid_type_error: "Please select a customer.",
-    // }),
-    // amount: z.coerce.number()
-    // .gt(0, { message: 'Please enter an amount greater than $0.'}),
-    // status: z.enum(['pending', 'paid'], {
-    //     invalid_type_error: "Please select an invoice status."
-    // }),
-    // date: z.string(),
-
-
     id: z.string(),
     title: z.string({
         invalid_type_error: "Please enter a title.",
@@ -39,23 +32,18 @@ const FormSchema = z.object({
     priority: z.enum(['low', 'medium', 'high'], {
         invalid_type_error: "Please select a valid priority level.",
     }), // Priority must be one of 'low', 'medium', or 'high'.
-    status: z.enum(['pending', 'paid'], {
+    status: z.enum(['pending', 'completed'], {
         invalid_type_error: "Please select an task status.",
-    }), // Status must be 'pending' or 'paid'.
+    }), // Status must be 'pending' or 'completed'.
     dayReminderSent: z.boolean().default(false),
     hourReminderSent: z.boolean().default(false),
   });
    
-const CreateInvoice = FormSchema.omit({ id: true });
-const UpdateInvoice = FormSchema.omit({id: true }); 
+const CreateTask = FormSchema.omit({ id: true });
+const UpdateTask = FormSchema.omit({id: true }); 
 
 export type State = {
     errors?: {
-        // customerId?: string[];
-        // amount?: string[];
-        // status?: string[];
-
-        // id?: string[];
         title?: string[];
         duedate?: string[];
         assignedId?: string[];
@@ -66,12 +54,8 @@ export type State = {
     };
     message?: string | null;
 };
-export async function createInvoice(prevState: State, formData: FormData) {
-  const validatedFields = CreateInvoice.safeParse({
-    // customerId: formData.get('customerId'),
-    // amount: formData.get('amount'),
-    // status: formData.get('status'),
-
+export async function createTask(prevState: State, formData: FormData) {
+  const validatedFields = CreateTask.safeParse({
     title: formData.get('title'),
     duedate: formData.get('duedate'),
     assignedId: formData.get('assignedId'),
@@ -88,10 +72,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     };
   }
 
-  // const { customerId, title, amount, status } = validatedFields.data;
   const { title, duedate, assignedId, assignerId, meetingId, priority, status } = validatedFields.data;
-  // const amountInCents = amount * 100;
-  // const date = new Date().toISOString().split('T')[0];
 
   try {
     console.log('Validated Data:', {
@@ -100,22 +81,19 @@ export async function createInvoice(prevState: State, formData: FormData) {
     
     await sql`
         INSERT INTO tasks (title, duedate, assignedId, assignerId, meetingId, priority, status, dayReminderSent, hourReminderSent)
-        VALUES (${title}, ${duedate}, ${assignedId}, ${assignerId},  ${meetingId}, ${priority}, ${status}, false, false)
+        VALUES (${title}, ${duedate}, ${assignedId}, ${assignerId}, ${meetingId}, ${priority}, ${status}, false, false)
     `;
   } catch (error) {
     return {
         message: 'Database Error: Failed to Create Task.',
     }
   }
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  revalidatePath('/dashboard/tasks');
+  redirect('/dashboard/tasks');
 }
 
-export async function updateInvoice(id: string, prevState: State, formData: FormData) {
-    const validatedFields = UpdateInvoice.safeParse({
-      // customerId: formData.get('customerId'),
-      // amount: formData.get('amount'),
-      // status: formData.get('status'),
+export async function updateTask(id: string, prevState: State, formData: FormData) {
+    const validatedFields = UpdateTask.safeParse({
       title: formData.get('title'),
       duedate: formData.get('duedate'),
       assignedId: formData.get('assignedId'),
@@ -132,11 +110,12 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
         };
     }
    
-    // const { customerId, amount, status } = validatedFields.data;
     const { title, duedate, assignedId, assignerId, meetingId, priority, status } = validatedFields.data;
-    // const amountInCents = amount * 100;
    
     try {
+      console.log('Validated Data:', {
+        title, duedate, assignedId, assignerId, meetingId, priority, status
+      });
         await sql`
         UPDATE tasks
         SET title = ${title}, duedate = ${duedate}, assignedId = ${assignedId}, assignerId = ${assignerId}, meetingId = ${meetingId}, priority = ${priority}, status = ${status}
@@ -146,18 +125,52 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
         return { message: 'Database Error: Failed to Update Task.' };
     }
    
-    revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    revalidatePath('/dashboard/tasks');
+    redirect('/dashboard/tasks');
   }
   
-  export async function deleteInvoice(id: string, prevState: State) {
+  export async function deleteTask(id: string, prevState: State) {
     try {
         await sql`DELETE FROM tasks WHERE id = ${id}`;
-        revalidatePath('/dashboard/invoices');
+        revalidatePath('/dashboard/tasks');
     } catch (error) {
         return { message: 'Database Error: Failed to Delete Task.'};
     }
   }
+
+  type User = {
+    email: string,
+    name?: string,
+  }
+
+  // export async function authenticate(
+  //   state: string | undefined,
+  //   payload: FormData
+  // ): Promise<string | User> {
+  //   try {
+  //     const user = await signIn('credentials', payload); // Assume `signIn` returns a user object
+  //     if (!user || !user.email) {
+  //       throw new Error('Invalid email or password');
+  //     }
+  
+  //     // Store the email in localStorage
+  //     if (typeof window !== 'undefined') {
+  //       localStorage.setItem('loggedInUserEmail', user.email);
+  //     }
+  
+  //     return user; // Return the authenticated user
+  //   } catch (error) {
+  //     if (error instanceof AuthError) {
+  //       switch (error.type) {
+  //         case 'CredentialsSignin':
+  //           return 'Invalid credentials.';
+  //         default:
+  //           return 'Something went wrong.';
+  //       }
+  //     }
+  //     throw error;
+  //   }
+  // }
 
   export async function authenticate(
     prevState: string | undefined,

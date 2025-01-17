@@ -1,9 +1,9 @@
-import Calendar from '@/app/dashboard/components/Calendar';
+import Calendar from '@/app/dashboard/components/NewCalendar';
 import { Card } from '@/app/ui/dashboard/cards';
 import RevenueChart from '@/app/ui/dashboard/revenue-chart';
 import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
-import { lusitana } from '@/app/ui/fonts';
-import { fetchRevenue, fetchLatestInvoices, fetchCardData } from '@/app/lib/data';
+import { lusitana, inter } from '@/app/ui/fonts';
+import { fetchRevenue, fetchLatestInvoices, fetchCardData, fetchFullMeetings } from '@/app/lib/data';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -11,14 +11,23 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-    const revenue = await fetchRevenue();
-    const latestInvoices = await fetchLatestInvoices();
-    const { 
-        numberOfInvoices,
-        numberOfCustomers,
-        totalPaidInvoices,
-        totalPendingInvoices,
-    } = await fetchCardData();
+    // const revenue = await fetchRevenue();
+    // const latestInvoices = await fetchLatestInvoices();
+    // const { 
+    //     numberOfInvoices,
+    //     numberOfCustomers,
+    //     totalPaidInvoices,
+    //     totalPendingInvoices,
+    // } = await fetchCardData();
+    const m = await fetchFullMeetings();
+    const m2 = m.map((meeting) => {
+      return {
+        title: meeting.title,
+        start: new Date(meeting.starttime).toISOString().slice(0, -5),
+        end: new Date(meeting.endtime).toISOString().slice(0, -5),
+        allDay: false,
+      }
+    })
   return (
     <main>
       {/* <h1 className={"mb-4 text-xl md:text-2xl"}>

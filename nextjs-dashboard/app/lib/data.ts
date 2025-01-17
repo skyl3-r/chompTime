@@ -1,12 +1,10 @@
 import { sql } from '@vercel/postgres';
 import {
   UserField,
-  // CustomerField,
   MeetingField,
+  FullMeetingField,
   CustomersTableType,
-  // InvoiceForm,
   TaskForm,
-  InvoicesTable,
   TasksTable,
   LatestInvoiceRaw,
   Revenue,
@@ -87,42 +85,6 @@ export async function fetchCardData() {
   }
 }
 
-// const ITEMS_PER_PAGE = 6;
-// export async function fetchFilteredInvoices(
-//   query: string,
-//   currentPage: number,
-// ) {
-//   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
-//   try {
-//     const invoices = await sql<InvoicesTable>`
-//       SELECT
-//         invoices.id,
-//         invoices.amount,
-//         invoices.date,
-//         invoices.status,
-//         customers.name,
-//         customers.email,
-//         customers.image_url
-//       FROM invoices
-//       JOIN customers ON invoices.customer_id = customers.id
-//       WHERE
-//         customers.name ILIKE ${`%${query}%`} OR
-//         customers.email ILIKE ${`%${query}%`} OR
-//         invoices.amount::text ILIKE ${`%${query}%`} OR
-//         invoices.date::text ILIKE ${`%${query}%`} OR
-//         invoices.status ILIKE ${`%${query}%`}
-//       ORDER BY invoices.date DESC
-//       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-//     `;
-
-//     return invoices.rows;
-//   } catch (error) {
-//     console.error('Database Error:', error);
-//     throw new Error('Failed to fetch invoices.');
-//   }
-// }
-
 
 const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredTasks(
@@ -172,27 +134,6 @@ export async function fetchFilteredTasks(
 }
 
 
-// export async function fetchInvoicesPages(query: string) {
-//   try {
-//     const count = await sql`SELECT COUNT(*)
-//     FROM invoices
-//     JOIN customers ON invoices.customer_id = customers.id
-//     WHERE
-//       customers.name ILIKE ${`%${query}%`} OR
-//       customers.email ILIKE ${`%${query}%`} OR
-//       invoices.amount::text ILIKE ${`%${query}%`} OR
-//       invoices.date::text ILIKE ${`%${query}%`} OR
-//       invoices.status ILIKE ${`%${query}%`}
-//   `;
-
-//     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-//     return totalPages;
-//   } catch (error) {
-//     console.error('Database Error:', error);
-//     throw new Error('Failed to fetch total number of invoices.');
-//   }
-// }
-
 export async function fetchTasksPages(query: string) {
   try {
     const count = await sql`SELECT COUNT(*)
@@ -217,31 +158,6 @@ export async function fetchTasksPages(query: string) {
     throw new Error('Failed to fetch total number of tasks.');
   }
 }
-
-// export async function fetchInvoiceById(id: string) {
-//   try {
-//     const data = await sql<InvoiceForm>`
-//       SELECT
-//         invoices.id,
-//         invoices.customer_id,
-//         invoices.amount,
-//         invoices.status
-//       FROM invoices
-//       WHERE invoices.id = ${id};
-//     `;
-
-//     const invoice = data.rows.map((invoice) => ({
-//       ...invoice,
-//       // Convert amount from cents to dollars
-//       amount: invoice.amount / 100,
-//     }));
-
-//     return invoice[0];
-//   } catch (error) {
-//     console.error('Database Error:', error);
-//     throw new Error('Failed to fetch invoice.');
-//   }
-// }
 
 export async function fetchTaskById(id: string) {
   try {
@@ -303,7 +219,6 @@ export async function fetchUserXP() {
   }
 }
 
-
 export async function fetchMeetings() {
   try {
     const data = await sql<MeetingField>`
@@ -312,6 +227,21 @@ export async function fetchMeetings() {
         title
       FROM meetings
       ORDER BY title ASC
+    `;
+
+    const meetings = data.rows;
+    return meetings;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all meetings.');
+  }
+}
+
+export async function fetchFullMeetings() {
+  try {
+    const data = await sql<FullMeetingField>`
+      SELECT *
+      FROM meetings
     `;
 
     const meetings = data.rows;
