@@ -7,6 +7,11 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
+const LoginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
 const FormSchema = z.object({
     id: z.string(),
     title: z.string({
@@ -132,6 +137,40 @@ export async function updateTask(id: string, prevState: State, formData: FormDat
         return { message: 'Database Error: Failed to Delete Task.'};
     }
   }
+
+  type User = {
+    email: string,
+    name?: string,
+  }
+
+  // export async function authenticate(
+  //   state: string | undefined,
+  //   payload: FormData
+  // ): Promise<string | User> {
+  //   try {
+  //     const user = await signIn('credentials', payload); // Assume `signIn` returns a user object
+  //     if (!user || !user.email) {
+  //       throw new Error('Invalid email or password');
+  //     }
+  
+  //     // Store the email in localStorage
+  //     if (typeof window !== 'undefined') {
+  //       localStorage.setItem('loggedInUserEmail', user.email);
+  //     }
+  
+  //     return user; // Return the authenticated user
+  //   } catch (error) {
+  //     if (error instanceof AuthError) {
+  //       switch (error.type) {
+  //         case 'CredentialsSignin':
+  //           return 'Invalid credentials.';
+  //         default:
+  //           return 'Something went wrong.';
+  //       }
+  //     }
+  //     throw error;
+  //   }
+  // }
 
   export async function authenticate(
     prevState: string | undefined,
