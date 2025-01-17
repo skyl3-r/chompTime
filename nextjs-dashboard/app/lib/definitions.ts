@@ -95,22 +95,10 @@ export type UserField = {
   name: string;
 };
 
-// export type CustomerField = {
-//   id: string;
-//   name: string;
-// };
-
 export type MeetingField = {
   id: string;
   title: string;
 };
-
-// export type InvoiceForm = {
-//   id: string;
-//   customer_id: string;
-//   amount: number;
-//   status: 'pending' | 'paid';
-// };
 
 export type TaskForm = {
   id: string;

@@ -1,8 +1,8 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteInvoiceFromForm } from './delete';
+import { deleteTaskFromForm } from './delete';
 
-export function CreateInvoice() {
+export function CreateTask() {
   return (
     <Link
       href="/dashboard/invoices/create"
@@ -14,7 +14,7 @@ export function CreateInvoice() {
   );
 }
 
-export function UpdateInvoice({ id }: { id: string }) {
+export function UpdateTask({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/invoices/${id}/edit`}
@@ -25,9 +25,9 @@ export function UpdateInvoice({ id }: { id: string }) {
   );
 }
 
-export function DeleteInvoice({ id }: { id: string }) {
+export function DeleteTask({ id }: { id: string }) {
   return (
-    <form action={deleteInvoiceFromForm}>
+    <form action={deleteTaskFromForm}>
       <input type="hidden" name="id" value={id} />
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
