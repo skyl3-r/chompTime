@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchUserXP, fetchUsers} from '@/app/lib/data';
+import { lusitana } from '@/app/ui/fonts';
+import { fetchUserXP } from '@/app/lib/data';
 
 export const metadata: Metadata = {
   title: 'Users XP',

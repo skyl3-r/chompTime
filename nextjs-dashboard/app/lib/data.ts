@@ -304,6 +304,25 @@ export async function fetchUserXP() {
   }
 }
 
+
+export async function fetchUserXP() {
+  try {
+    const data = await sql<{ id: string; name: string; email: string; xp: number }>`
+      SELECT
+        id,
+        name,
+        email,
+        xp
+      FROM users
+      ORDER BY xp DESC
+    `;
+    return data.rows; // Returns an array of users with XP data
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch user XP data.');
+  }
+}
+
 export async function fetchMeetings() {
   try {
     const data = await sql<MeetingField>`

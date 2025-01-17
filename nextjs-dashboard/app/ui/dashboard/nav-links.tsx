@@ -5,21 +5,23 @@ import {
   HomeIcon,
   TableCellsIcon,
 } from '@heroicons/react/24/outline';
-import { GiSharkFin } from "react-icons/gi";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaGamepad } from "react-icons/fa";
 import Link from 'next/link';
+import { GrTasks } from "react-icons/gr";
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Calendar', href: '/dashboard', icon: FaRegCalendarAlt },
   {
     name: 'Tasks',
     href: '/dashboard/invoices',
-    icon: TableCellsIcon,
+    icon: GrTasks,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'XP', href: '/dashboard/customers', icon: FaGamepad },
 ];
 
 export default function NavLinks() {
