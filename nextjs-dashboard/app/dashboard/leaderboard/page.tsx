@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
-//import { lusitana } from '@/app/ui/fonts';
+import { lusitana } from '@/app/ui/fonts';
 import { fetchUserXP } from '@/app/lib/data';
 //import SharkPopup from './SharkPopup';
 
 export const metadata: Metadata = {
-  title: 'Users XP',
+  title: 'Leaderboard',
 };
 
 // async function fetchUsers() {
@@ -61,24 +61,30 @@ function SharkSpeechBubble() {
 
 export default async function Page() {
   const users = await fetchUserXP();
-
+  // return (
+  //   <main>
+  //     <div className="mt-6">
+  //       <h2 className={`${lusitana.className} mb-4 text-lg md:text-2xl`}>Leaderboard</h2>
+  //     </div>
+  //   </main>
+  // )
   return (
-    <main className="w-full px-4 py-8">
-      <h1 className={"text-2xl font-bold mb-6 text-center text-blue-600"}>
-        XP Leaderboard
+    <main className="w-full">
+      <h1 className={`${lusitana.className} text-2xl mb-6 `}>
+        Leaderboard
       </h1>
       <div className="overflow-hidden rounded-lg shadow-lg bg-white">
         {/* Desktop Table */}
         <table className="hidden md:table w-full border-collapse">
           <thead>
             <tr className="bg-blue-100">
-              <th className="border px-6 py-4 text-left font-semibold text-blue-700">
+              <th className="border px-6 py-4 text-sm text-left font-semibold text-blue-700">
                 Name
               </th>
-              <th className="border px-6 py-4 text-left font-semibold text-blue-700">
+              <th className="border px-6 py-4 text-sm text-left font-semibold text-blue-700">
                 Email
               </th>
-              <th className="border px-6 py-4 text-center font-semibold text-blue-700">
+              <th className="border px-6 py-4 text-sm text-center font-semibold text-blue-700">
                 XP
               </th>
             </tr>
@@ -87,13 +93,13 @@ export default async function Page() {
             {users.map((user, index) => (
               <tr
                 key={user.id}
-                className={`hover:bg-blue-50 ${
-                  index % 2 === 0 ? 'bg-blue-50' : 'bg-white'
+                className={`${
+                  index % 2 === 0 ? 'bg-blue-50 hover:bg-blue-100' : 'bg-white hover:bg-blue-100'
                 }`}
               >
-                <td className="border px-6 py-4 text-blue-900">{user.name}</td>
-                <td className="border px-6 py-4 text-blue-900">{user.email}</td>
-                <td className="border px-6 py-4 text-center font-bold text-blue-900">
+                <td className="border px-6 py-4 text-sm text-blue-900">{user.name}</td>
+                <td className="border px-6 py-4 text-sm text-blue-900">{user.email}</td>
+                <td className="border px-6 py-4 text-sm text-center font-bold text-blue-900">
                   {user.xp}
                 </td>
               </tr>

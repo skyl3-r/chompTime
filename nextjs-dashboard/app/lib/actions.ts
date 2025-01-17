@@ -38,7 +38,38 @@ const FormSchema = z.object({
     dayReminderSent: z.boolean().default(false),
     hourReminderSent: z.boolean().default(false),
   });
+
+  const MeetingFormSchema = z.object({
+    id: z.string(),
+    title: z.string({
+        invalid_type_error: "Please enter a title.",
+    }), // Title must be a string.
+    starttime: z.string({
+        invalid_type_error: "Please select a date.",
+    }), // Start time must be a string.
+    endtime: z.string({
+      invalid_type_error: "Please select a date.",
+  }), // End time must be a string.
+    locationlink: z.string({
+      invalid_type_error: "Please enter the location or link for this meeting"
+    }),
+    dayReminderSent: z.boolean().default(false),
+    hourReminderSent: z.boolean().default(false),
+  });
    
+
+  const ParticipantFormSchema = z.object({
+    id: z.string(),
+    userid: z.string({
+        invalid_type_error: "Please choose a participant to add.",
+    }), // Assigned ID must be a string.
+    meetingid: z.string({
+        invalid_type_error: "Please choose a meeting to add to.",
+    }), // Meeting ID must be a string.
+  });
+
+const CreateMeeting = MeetingFormSchema.omit({ id: true});
+const CreateParticipant = ParticipantFormSchema.omit({ id: true });
 const CreateTask = FormSchema.omit({ id: true });
 const UpdateTask = FormSchema.omit({id: true }); 
 
@@ -54,6 +85,25 @@ export type State = {
     };
     message?: string | null;
 };
+
+export type MeetingState = {
+  errors?: {
+    title?: string[];
+    starttime?: string[];
+    endtime?: string[];
+    locationlink?: string[];
+  };
+  message?: string | null;
+}
+
+export type ParticipantState = {
+  errors?: {
+      userid?: string[];
+      meetingid?: string[];
+  };
+  message?: string | null;
+};
+
 export async function createTask(prevState: State, formData: FormData) {
   const validatedFields = CreateTask.safeParse({
     title: formData.get('title'),
@@ -90,6 +140,101 @@ export async function createTask(prevState: State, formData: FormData) {
   }
   revalidatePath('/dashboard/tasks');
   redirect('/dashboard/tasks');
+}
+
+export async function createMeeting(prevState: State, formData: FormData) {
+  const validatedFields = CreateMeeting.safeParse({
+    // customerId: formData.get('customerId'),
+    // amount: formData.get('amount'),
+    // status: formData.get('status'),
+
+    title: formData.get('title'),
+    starttime: formData.get('starttime'),
+    endtime: formData.get('endtime'),
+    locationlink: formData.get('locationlink'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Meeting.',
+    };
+  }
+
+  // const { customerId, title, amount, status } = validatedFields.data;
+  const { title, starttime, endtime, locationlink } = validatedFields.data;
+  // const amountInCents = amount * 100;
+  // const date = new Date().toISOString().split('T')[0];
+
+  try {
+    // console.log('Validated Data:', {
+    //   title, starttime, endtime, locationlink
+    // });
+    
+    await sql`
+        INSERT INTO meetings (title, starttime, endtime, locationlink, dayReminderSent, hourReminderSent)
+        VALUES (${title}, ${starttime}, ${endtime}, ${locationlink}, false, false)
+    `;
+  } catch (error) {
+    return {
+        message: 'Database Error: Failed to Create Task.',
+    }
+  }
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
+}
+
+export async function createParticipant(prevState: ParticipantState, formData: FormData) {
+  const validatedFields = CreateParticipant.safeParse({
+    userid: formData.get('userid'),
+    meetingid: formData.get('meetingid'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Participant.',
+    };
+  }
+
+  // const { customerId, title, amount, status } = validatedFields.data;
+  const { userid, meetingid } = validatedFields.data;
+  // const amountInCents = amount * 100;
+  // const date = new Date().toISOString().split('T')[0];
+
+  try {
+    // console.log('Validated Data:', {
+    //   userid, meetingid
+    // });
+    
+    const existingParticipant = await sql`
+      SELECT * FROM participants WHERE userid = ${userid} AND meetingid = ${meetingid}
+    `;
+
+    if (existingParticipant.rows.length > 0) {
+      return {
+        message: 'Participant already exists for this meeting.',
+      };
+    }
+
+    // Insert new participant and update user XP in a transaction
+    await sql`
+        INSERT INTO participants (userid, meetingid)
+        VALUES (${userid}, ${meetingid})
+      `;
+
+    await sql`
+        UPDATE users
+        SET xp = xp + 50
+        WHERE id = ${userid}
+      `;
+  } catch (error) {
+    return {
+        message: 'Database Error: Failed to Create Participant.',
+    }
+  }
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
 export async function updateTask(id: string, prevState: State, formData: FormData) {
