@@ -64,7 +64,7 @@ export default async function Page() {
 
       <div className="mt-6">
         <h2 className="mb-4 text-lg md:text-2xl">Calendar</h2>
-        <Calendar />
+        <Calendar meetings={m2}/>
 
 
       </div>
