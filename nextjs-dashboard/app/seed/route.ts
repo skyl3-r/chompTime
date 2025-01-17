@@ -81,16 +81,43 @@ async function seedTasks() {
     );
   `;
 
+  // const insertedTasks = await Promise.all(
+  //   tasks.map(async (task) => {
+  //     return client.sql`
+  //       INSERT INTO tasks (id, title, duedate, assignedId, assignerId, meetingId, priority, status, dayReminderSent, hourReminderSent)
+  //       VALUES (${task.id}, ${task.title}, ${task.duedate}, ${task.assignedId}, ${task.assignerId}, ${task.meetingId}, ${task.priority}, ${task.status}, ${task.dayReminderSent}, ${task.hourReminderSent})
+  //       ON CONFLICT (id) DO NOTHING;
+  //     `;
+  //   }),
+  // );
+
   const insertedTasks = await Promise.all(
     tasks.map(async (task) => {
-      return client.sql`
+      // Insert task into the database
+      await client.sql`
         INSERT INTO tasks (id, title, duedate, assignedId, assignerId, meetingId, priority, status, dayReminderSent, hourReminderSent)
         VALUES (${task.id}, ${task.title}, ${task.duedate}, ${task.assignedId}, ${task.assignerId}, ${task.meetingId}, ${task.priority}, ${task.status}, ${task.dayReminderSent}, ${task.hourReminderSent})
         ON CONFLICT (id) DO NOTHING;
       `;
+
+      // Check if the task is marked as completed
+      if (task.status.toLowerCase() === 'completed') {
+        // Update xp for the assigned user
+        await client.sql`
+          UPDATE users
+          SET xp = xp + 10
+          WHERE id = ${task.assignedId};
+        `;
+
+        // Optionally, update xp for the assigner (if needed)
+        await client.sql`
+          UPDATE users
+          SET xp = xp + 5
+          WHERE id = ${task.assignerId};
+        `;
+      }
     }),
   );
-
   return insertedTasks;
 }
 

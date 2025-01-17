@@ -5,21 +5,23 @@ import {
   HomeIcon,
   TableCellsIcon,
 } from '@heroicons/react/24/outline';
-import { GiSharkFin } from "react-icons/gi";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaGamepad } from "react-icons/fa";
 import Link from 'next/link';
+import { GoTasklist } from "react-icons/go";
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Calendar', href: '/dashboard', icon: FaRegCalendarAlt },
   {
     name: 'Tasks',
-    href: '/dashboard/invoices',
-    icon: TableCellsIcon,
+    href: '/dashboard/tasks',
+    icon: GoTasklist,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'XP', href: '/dashboard/customers', icon: FaGamepad },
 ];
 
 export default function NavLinks() {
@@ -32,11 +34,11 @@ export default function NavLinks() {
           <Link
             key={link.name}
             href={link.href}
-            className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
+            className={clsx("flex h-[55px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
               {'bg-sky-100 text-blue-600': pathname === link.href,},)}
           >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <LinkIcon className="w-7 h-5" />
+            <p className="hidden md:block text-[16px]">{link.name}</p>
           </Link>
         );
       })}
