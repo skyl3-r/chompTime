@@ -21,7 +21,7 @@ const links = [
     href: '/dashboard/tasks',
     icon: GoTasklist,
   },
-  { name: 'XP', href: '/dashboard/customers', icon: FaGamepad },
+  { name: 'Leaderboard', href: '/dashboard/leaderboard', icon: FaGamepad },
 ];
 
 export default function NavLinks() {

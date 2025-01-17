@@ -38,13 +38,22 @@ font-family: 'Inter', sans-serif;
     background: #1d4ed8; /* Background color when button is pressed */
     border-color: #1d4ed8; /* Border color when pressed */
 }
+.fc-toolbar-title {
+    font-size: large;
+    font-weight: bold;
+}
+// .fc-theme-standard {
+//     background: #f9fafb;
+//     margin: 3px;
+// }
 `
 
 
 const Calendar = (meetings) => {
     // console.log(meetings.meetings);
   return (
-    <StyleWrapper>
+    <div className={'flex-1 p-5 bg-[#f9fafb] rounded-lg'}>
+      <StyleWrapper>
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
@@ -52,6 +61,8 @@ const Calendar = (meetings) => {
       displayEventEnd={true}
     />
     </StyleWrapper>
+    </div>
+    
     
   );
 };
