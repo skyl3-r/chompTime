@@ -28,7 +28,16 @@ font-family: 'Inter', sans-serif;
 .fc-daygrid-event-dot {
     display: none;
 }
-
+.fc-button.fc-prev-button, .fc-button.fc-next-button {
+    background: #3472e7;
+    background-image: none;
+    border: 2px solid #9ca3af;
+}
+.fc-button.fc-prev-button:active, 
+.fc-button.fc-next-button:active {
+    background: #1d4ed8; /* Background color when button is pressed */
+    border-color: #1d4ed8; /* Border color when pressed */
+}
 `
 
 
