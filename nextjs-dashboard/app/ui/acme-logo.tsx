@@ -1,5 +1,6 @@
 // import { GlobeAltIcon } from '@heroicons/react/24/outline';
 import { GiSharkFin } from "react-icons/gi";
+import {CiCalendar} from "react-icons/ci";
 import { lusitana } from '@/app/ui/fonts';
 
 export default function AcmeLogo() {
