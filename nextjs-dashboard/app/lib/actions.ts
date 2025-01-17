@@ -47,18 +47,6 @@ const FormSchema = z.object({
   });
 
   const MeetingFormSchema = z.object({
-    // id: z.string(),
-    // customerId: z.string({
-    //     invalid_type_error: "Please select a customer.",
-    // }),
-    // amount: z.coerce.number()
-    // .gt(0, { message: 'Please enter an amount greater than $0.'}),
-    // status: z.enum(['pending', 'paid'], {
-    //     invalid_type_error: "Please select an invoice status."
-    // }),
-    // date: z.string(),
-
-
     id: z.string(),
     title: z.string({
         invalid_type_error: "Please enter a title.",
@@ -77,7 +65,18 @@ const FormSchema = z.object({
   });
    
 
+  const ParticipantFormSchema = z.object({
+    id: z.string(),
+    userid: z.string({
+        invalid_type_error: "Please choose a participant to add.",
+    }), // Assigned ID must be a string.
+    meetingid: z.string({
+        invalid_type_error: "Please choose a meeting to add to.",
+    }), // Meeting ID must be a string.
+  });
+
 const CreateMeeting = MeetingFormSchema.omit({ id: true});
+const CreateParticipant = ParticipantFormSchema.omit({ id: true });
 const CreateTask = FormSchema.omit({ id: true });
 const UpdateTask = FormSchema.omit({id: true }); 
 
@@ -108,6 +107,14 @@ export type MeetingState = {
   };
   message?: string | null;
 }
+
+export type ParticipantState = {
+  errors?: {
+      userid?: string[];
+      meetingid?: string[];
+  };
+  message?: string | null;
+};
 
 export async function createTask(prevState: State, formData: FormData) {
   const validatedFields = CreateTask.safeParse({
@@ -170,7 +177,7 @@ export async function createMeeting(prevState: State, formData: FormData) {
   if (!validatedFields.success) {
     return {
         errors: validatedFields.error.flatten().fieldErrors,
-        message: 'Missing Fields. Failed to Create Task.',
+        message: 'Missing Fields. Failed to Create Meeting.',
     };
   }
 
@@ -180,9 +187,9 @@ export async function createMeeting(prevState: State, formData: FormData) {
   // const date = new Date().toISOString().split('T')[0];
 
   try {
-    console.log('Validated Data:', {
-      title, starttime, endtime, locationlink
-    });
+    // console.log('Validated Data:', {
+    //   title, starttime, endtime, locationlink
+    // });
     
     await sql`
         INSERT INTO meetings (title, starttime, endtime, locationlink, dayReminderSent, hourReminderSent)
@@ -191,6 +198,59 @@ export async function createMeeting(prevState: State, formData: FormData) {
   } catch (error) {
     return {
         message: 'Database Error: Failed to Create Task.',
+    }
+  }
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
+}
+
+export async function createParticipant(prevState: ParticipantState, formData: FormData) {
+  const validatedFields = CreateParticipant.safeParse({
+    userid: formData.get('userid'),
+    meetingid: formData.get('meetingid'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Participant.',
+    };
+  }
+
+  // const { customerId, title, amount, status } = validatedFields.data;
+  const { userid, meetingid } = validatedFields.data;
+  // const amountInCents = amount * 100;
+  // const date = new Date().toISOString().split('T')[0];
+
+  try {
+    // console.log('Validated Data:', {
+    //   userid, meetingid
+    // });
+    
+    const existingParticipant = await sql`
+      SELECT * FROM participants WHERE userid = ${userid} AND meetingid = ${meetingid}
+    `;
+
+    if (existingParticipant.rows.length > 0) {
+      return {
+        message: 'Participant already exists for this meeting.',
+      };
+    }
+
+    // Insert new participant and update user XP in a transaction
+    await sql`
+        INSERT INTO participants (userid, meetingid)
+        VALUES (${userid}, ${meetingid})
+      `;
+
+    await sql`
+        UPDATE users
+        SET xp = xp + 50
+        WHERE id = ${userid}
+      `;
+  } catch (error) {
+    return {
+        message: 'Database Error: Failed to Create Participant.',
     }
   }
   revalidatePath('/dashboard');

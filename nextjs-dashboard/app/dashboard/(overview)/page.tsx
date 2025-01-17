@@ -7,7 +7,7 @@ import { fetchRevenue, fetchLatestInvoices, fetchCardData, fetchFullMeetings } f
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { CreateMeeting } from '@/app/ui/invoices/buttons';
+import { CreateMeeting, CreateParticipant } from '@/app/ui/invoices/buttons';
 
 export const metadata: Metadata = {
     title: 'Dashboard',
@@ -40,8 +40,11 @@ export default async function Page() {
       <div className={`${inter.className} mt-6`}>
         <Calendar meetings={m2}/>
       </div>
-      <div className="flex mt-6">
+      <div className="flex flex row mt-6">
+        <div className='mr-3'>
       <CreateMeeting />
+        </div>
+      <CreateParticipant />
       </div>
     </main>
   );
