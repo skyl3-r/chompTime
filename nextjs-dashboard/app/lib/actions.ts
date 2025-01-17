@@ -153,7 +153,7 @@ export async function updateTask(id: string, prevState: State, formData: FormDat
     redirect('/dashboard/invoices');
   }
   
-  export async function deleteTask(id: string, prevState: State) {
+  export async function deleteInvoice(id: string, prevState: State) {
     try {
         await sql`DELETE FROM tasks WHERE id = ${id}`;
         revalidatePath('/dashboard/invoices');
