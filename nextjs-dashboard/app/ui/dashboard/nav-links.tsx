@@ -8,7 +8,7 @@ import {
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaGamepad } from "react-icons/fa";
 import Link from 'next/link';
-import { GrTasks } from "react-icons/gr";
+import { GoTasklist } from "react-icons/go";
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
@@ -19,7 +19,7 @@ const links = [
   {
     name: 'Tasks',
     href: '/dashboard/invoices',
-    icon: GrTasks,
+    icon: GoTasklist,
   },
   { name: 'XP', href: '/dashboard/customers', icon: FaGamepad },
 ];
@@ -34,11 +34,11 @@ export default function NavLinks() {
           <Link
             key={link.name}
             href={link.href}
-            className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
+            className={clsx("flex h-[55px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
               {'bg-sky-100 text-blue-600': pathname === link.href,},)}
           >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <LinkIcon className="w-7 h-5" />
+            <p className="hidden md:block text-[16px]">{link.name}</p>
           </Link>
         );
       })}

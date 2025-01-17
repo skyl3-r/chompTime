@@ -21,9 +21,9 @@ export default async function Page() {
     } = await fetchCardData();
   return (
     <main>
-      <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+      {/* <h1 className={"mb-4 text-xl md:text-2xl"}>
         Dashboard
-      </h1>
+      </h1> */}
       {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Card title="Collected" value={totalPaidInvoices} type="collected" />
         <Card title="Pending" value={totalPendingInvoices} type="pending" />
@@ -40,7 +40,7 @@ export default async function Page() {
       </div> */}
 
       <div className="mt-6">
-        <h2 className="mb-4 text-lg md:text-xl">Calendar</h2>
+        <h2 className="mb-4 text-lg md:text-2xl">Calendar</h2>
         <Calendar />
       </div>
 
