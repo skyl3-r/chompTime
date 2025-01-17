@@ -116,9 +116,9 @@ export type TaskForm = {
   id: string;
   title: string;
   duedate: string;
-  assignedId: string;
-  assignerId: string;
-  meetingId: string;
+  assignedid: string;
+  assignerid: string;
+  meetingid: string;
   priority: 'low' | 'medium'| 'high';
   status: 'pending' | 'completed';
 };
