@@ -45,9 +45,40 @@ const FormSchema = z.object({
     dayReminderSent: z.boolean().default(false),
     hourReminderSent: z.boolean().default(false),
   });
+
+  const MeetingFormSchema = z.object({
+    // id: z.string(),
+    // customerId: z.string({
+    //     invalid_type_error: "Please select a customer.",
+    // }),
+    // amount: z.coerce.number()
+    // .gt(0, { message: 'Please enter an amount greater than $0.'}),
+    // status: z.enum(['pending', 'paid'], {
+    //     invalid_type_error: "Please select an invoice status."
+    // }),
+    // date: z.string(),
+
+
+    id: z.string(),
+    title: z.string({
+        invalid_type_error: "Please enter a title.",
+    }), // Title must be a string.
+    starttime: z.string({
+        invalid_type_error: "Please select a date.",
+    }), // Start time must be a string.
+    endtime: z.string({
+      invalid_type_error: "Please select a date.",
+  }), // End time must be a string.
+    locationlink: z.string({
+      invalid_type_error: "Please enter the location or link for this meeting"
+    }),
+    dayReminderSent: z.boolean().default(false),
+    hourReminderSent: z.boolean().default(false),
+  });
    
 const CreateInvoice = FormSchema.omit({ id: true });
 const UpdateInvoice = FormSchema.omit({id: true }); 
+const CreateMeeting = MeetingFormSchema.omit({ id: true});
 
 export type State = {
     errors?: {
@@ -66,6 +97,17 @@ export type State = {
     };
     message?: string | null;
 };
+
+export type MeetingState = {
+  errors?: {
+    title?: string[];
+    starttime?: string[];
+    endtime?: string[];
+    locationlink?: string[];
+  };
+  message?: string | null;
+}
+
 export async function createInvoice(prevState: State, formData: FormData) {
   const validatedFields = CreateInvoice.safeParse({
     // customerId: formData.get('customerId'),
@@ -109,6 +151,48 @@ export async function createInvoice(prevState: State, formData: FormData) {
   }
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
+}
+
+export async function createMeeting(prevState: State, formData: FormData) {
+  const validatedFields = CreateMeeting.safeParse({
+    // customerId: formData.get('customerId'),
+    // amount: formData.get('amount'),
+    // status: formData.get('status'),
+
+    title: formData.get('title'),
+    starttime: formData.get('starttime'),
+    endtime: formData.get('endtime'),
+    locationlink: formData.get('locationlink'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Task.',
+    };
+  }
+
+  // const { customerId, title, amount, status } = validatedFields.data;
+  const { title, starttime, endtime, locationlink } = validatedFields.data;
+  // const amountInCents = amount * 100;
+  // const date = new Date().toISOString().split('T')[0];
+
+  try {
+    console.log('Validated Data:', {
+      title, starttime, endtime, locationlink
+    });
+    
+    await sql`
+        INSERT INTO meetings (title, starttime, endtime, locationlink, dayReminderSent, hourReminderSent)
+        VALUES (${title}, ${starttime}, ${endtime}, ${locationlink}, false, false)
+    `;
+  } catch (error) {
+    return {
+        message: 'Database Error: Failed to Create Task.',
+    }
+  }
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
 export async function updateInvoice(id: string, prevState: State, formData: FormData) {

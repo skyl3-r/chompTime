@@ -5,6 +5,8 @@ import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
 import { lusitana, inter } from '@/app/ui/fonts';
 import { fetchRevenue, fetchLatestInvoices, fetchCardData, fetchFullMeetings } from '@/app/lib/data';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { PlusIcon } from '@heroicons/react/24/outline';
 
 export const metadata: Metadata = {
     title: 'Dashboard',
@@ -23,8 +25,8 @@ export default async function Page() {
     const m2 = m.map((meeting) => {
       return {
         title: meeting.title,
-        start: new Date(meeting.starttime).toISOString().slice(0, -5),
-        end: new Date(meeting.endtime).toISOString().slice(0, -5),
+        start: new Date(meeting.starttime).toISOString().slice(0, -5) + 'Z',
+        end: new Date(meeting.endtime).toISOString().slice(0, -5) + 'Z',
         allDay: false,
       }
     })
@@ -33,30 +35,25 @@ export default async function Page() {
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Calendar
       </h1>
-      {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Card title="Collected" value={totalPaidInvoices} type="collected" />
-        <Card title="Pending" value={totalPendingInvoices} type="pending" />
-        <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
-        <Card
-          title="Total Customers"
-          value={numberOfCustomers}
-          type="customers"
-        />
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <RevenueChart revenue={revenue}  />
-        <LatestInvoices latestInvoices={latestInvoices} />
-      </div> */}
 
       <div className={`${inter.className} mt-6`}>
-        {/* <h2 className="mb-4 text-lg md:text-xl">Calendar</h2> */}
         <Calendar meetings={m2}/>
       </div>
-
-      {/* <div className="mt-6">
-        <h2 className="mb-4 text -lg md:text-xl">Task Manager</h2>
-        <TaskManager />
-      </div> */}
+      <div className="flex mt-6">
+      <CreateMeeting />
+      </div>
     </main>
+  );
+}
+
+export function CreateMeeting() {
+  return (
+    <Link
+      href="/dashboard/create"
+      className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      <span className="">Create Task</span>{' '}
+      <PlusIcon className="h-5 md:ml-4" />
+    </Link>
   );
 }
